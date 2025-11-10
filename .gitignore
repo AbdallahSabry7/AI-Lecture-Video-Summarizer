@@ -1,0 +1,14 @@
+# Ignore model folders
+Model/Lecture_summarizer/
+Model/whisper-base/
+
+# Ignore datasets
+Data/
+
+# Temporary and system files
+__pycache__/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
