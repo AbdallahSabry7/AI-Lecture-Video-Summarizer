@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Lecture Summarizer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>AI Lecture Summarizer</h1>
+        <p>Upload long lectures or paste text to generate concise notes.</p>
+        <label class="api-label">
+          API URL
+          <input id="apiBase" type="url" value="/api" />
+        </label>
+      </header>
+
+      <section class="card">
+        <h2>Summarize Text</h2>
+        <textarea
+          id="textInput"
+          placeholder="Paste lecture text..."
+          rows="10"
+        ></textarea>
+        <button id="textSubmit">Summarize</button>
+        <div class="output">
+          <h3>Summary</h3>
+          <textarea id="textSummary" rows="10" readonly class="placeholder">No summary generated yet.</textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Transcribe &amp; Summarize Media</h2>
+        <input
+          id="mediaInput"
+          type="file"
+          accept="audio/*,video/*"
+          class="file-input"
+        />
+        <button id="mediaSubmit">Upload &amp; Process</button>
+        <div class="output">
+          <h3>Transcript</h3>
+          <textarea id="mediaTranscript" rows="8" readonly></textarea>
+        </div>
+        <div class="output">
+          <h3>Summary</h3>
+          <textarea id="mediaSummary" rows="6" readonly></textarea>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" role="status"></div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
+

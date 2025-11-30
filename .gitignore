@@ -1,6 +1,7 @@
 # Ignore model folders
 Model/Lecture_summarizer/
 Model/whisper-base/
+backend/.venv/
 
 # Ignore datasets
 Data/
