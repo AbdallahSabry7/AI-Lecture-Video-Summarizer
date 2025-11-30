@@ -1,4 +1,4 @@
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+from transformers import BartForConditionalGeneration, BartTokenizerFast
 import torch
 import os
 
@@ -7,12 +7,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model_path = os.path.join(BASE_DIR, "Model", "Lecture_summarizer")
 
 # Load model and tokenizer
-tokenizer = T5Tokenizer.from_pretrained(model_path)
-model = T5ForConditionalGeneration.from_pretrained(model_path)
+tokenizer = BartTokenizerFast.from_pretrained(model_path)
+model = BartForConditionalGeneration.from_pretrained(model_path)
 
 def summarize_chunk(chunk, max_length=150, min_length=40):
     # Match the exact input format you trained on
-    prompt = f"If important: summarize. If not: output 0. Text: {chunk}"
+    prompt = chunk
 
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True)
     summary_ids = model.generate(

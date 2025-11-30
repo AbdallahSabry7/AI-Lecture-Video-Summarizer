@@ -12,10 +12,9 @@ import torch
 from transformers import BartForConditionalGeneration, BartTokenizerFast
 
 from backend.config import DEVICE, SUMMARIZER_DIR, TEXT_CHUNK_WORD_COUNT
+from backend.services.local_variables import DEV_KEY, API_KEY
 
 
-DEV_KEY = "apibce198c0eb7a407b9"
-API_KEY = "8432a3d38a1d4a3d84af196c441292e7"
 REWRITERAI_URL = "https://rewriter.ai/api/paraphraser"
 
 

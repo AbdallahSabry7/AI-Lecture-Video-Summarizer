@@ -1,0 +1,2 @@
+DEV_KEY = "apibce198c0eb7a407b9"
+API_KEY = "8432a3d38a1d4a3d84af196c441292e7"

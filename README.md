@@ -20,8 +20,8 @@ AI-Lecture-Video-Summarizer-main
 ```
 
 > **Note**  
-> Upload your PARAPHRASER_API_KEY using  "setx PARAPHRASER_API_KEY "your_api_key_here""
-> Download/keep both model folders in `model/` before starting the backend.  
+> Change the API_KEY and DEV_KEY to your keys in "backend\services\summarizer.py".
+> Download/keep both model folders in `model/` before starting the backend by running "download_models.py".  
 > Use `model/whisper-base/whisper_load.py` if you still need to pull Whisper from Hugging Face.  
 > **For audio/video processing**: Install [ffmpeg](https://ffmpeg.org/download.html) and ensure it's in your system PATH. This is required for converting audio/video files to the format needed by Whisper.
 
