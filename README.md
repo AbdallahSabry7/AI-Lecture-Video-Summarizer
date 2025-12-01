@@ -3,7 +3,7 @@
 Full-stack lecture assistant that:
 
 - Transcribes long-form audio or video with a local Whisper model
-- Summarizes transcripts with a fine-tuned T5 model trained for lecture notes
+- Summarizes transcripts with a fine-tuned Bart model trained for lecture notes
 - Exposes a REST API (FastAPI) plus a lightweight frontend for uploads and text summaries
 
 ## Project layout
