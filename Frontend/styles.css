@@ -130,3 +130,22 @@ button:not(:disabled):hover {
   transform: translateY(0);
 }
 
+/* --- NEW STYLES FOR DOWNLOAD BUTTON --- */
+.secondary-btn {
+  background: transparent;
+  border: 2px solid #45a29e;
+  color: #45a29e;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+}
+
+.secondary-btn:not(:disabled):hover {
+  background: rgba(69, 162, 158, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(69, 162, 158, 0.2);
+}
+
+.secondary-btn:active {
+  transform: translateY(0);
+}

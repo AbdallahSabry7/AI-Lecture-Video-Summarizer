@@ -2,6 +2,9 @@
 Audio/video transcription helpers backed by Whisper.
 """
 from __future__ import annotations
+import os
+
+os.environ["PATH"] += os.pathsep + r"C:\ffmpeg"
 
 import tempfile
 from functools import lru_cache
@@ -12,6 +15,8 @@ import numpy as np
 import soundfile as sf
 import torch
 from pydub import AudioSegment
+AudioSegment.converter = r"C:\ffmpeg\ffmpeg.exe"
+AudioSegment.ffprobe   = r"C:\ffmpeg\ffprobe.exe"
 from transformers import WhisperForConditionalGeneration, WhisperProcessor
 
 from backend.config import (
@@ -112,7 +117,7 @@ def transcribe_media(temp_file: Path) -> str:
             chunk, sampling_rate=sample_rate, return_tensors="pt"
         ).input_features.to(DEVICE)
         with torch.no_grad():
-            pred_ids = model.generate(input_features, max_new_tokens=400)
+            pred_ids = model.generate(input_features, max_new_tokens=400,language="en", task="transcribe")
         chunk_transcript = processor.batch_decode(
             pred_ids, skip_special_tokens=True
         )[0]

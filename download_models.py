@@ -1,8 +1,3 @@
-"""
-Helper script to download required models.
-Run this once to download Whisper and verify fine_tuned model is present.
-"""
-
 import sys
 from pathlib import Path
 
@@ -38,17 +33,16 @@ def check_whisper_model():
         processor.save_pretrained(str(whisper_dir))
         model.save_pretrained(str(whisper_dir))
 
-        print("  [OK] Whisper model downloaded successfully!")
+        print("[OK] Whisper model downloaded successfully!")
         return True
 
     except Exception as e:
-        print(f"  [ERROR] Failed to download Whisper model: {e}")
-        print("  Make sure you have internet connection and try again.")
+        print(f"[ERROR] Failed to download Whisper model: {e}")
         return False
 
 
-def check_fine_tuned_model():
-    """Check if fine-tuned summarizer model exists, download if missing."""
+def check_fine_tuned_summarizer():
+    """Check if fine-tuned lecture summarizer exists, download if missing."""
     fine_tuned_dir = PROJECT_ROOT / "model" / "Lecture_summarizer"
     config_file = fine_tuned_dir / "config.json"
 
@@ -58,7 +52,7 @@ def check_fine_tuned_model():
 
     print("[MISSING] Fine-tuned summarizer model not found")
     print(f"  Location: {fine_tuned_dir}")
-    print("  Downloading model from HuggingFace...")
+    print("  Downloading model from Hugging Face...")
 
     try:
         from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -74,27 +68,59 @@ def check_fine_tuned_model():
         tokenizer.save_pretrained(str(fine_tuned_dir))
         model.save_pretrained(str(fine_tuned_dir))
 
-        print("  [OK] Fine-tuned summarizer model downloaded successfully!")
+        print("[OK] Fine-tuned summarizer model downloaded successfully!")
         return True
 
     except Exception as e:
-        print(f"  [ERROR] Failed to download fine-tuned model: {e}")
-        print("  Make sure you have internet connection and try again.")
+        print(f"[ERROR] Failed to download fine-tuned summarizer model: {e}")
+        return False
+
+
+def check_flan_t5_model():
+    """Check if FLAN-T5 model exists, download if missing."""
+    flan_dir = PROJECT_ROOT / "model" / "flan-t5-base"
+    config_file = flan_dir / "config.json"
+
+    if config_file.exists():
+        print("[OK] FLAN-T5 model found")
+        return True
+
+    print("[MISSING] FLAN-T5 model not found")
+    print(f"  Location: {flan_dir}")
+    print("  Downloading FLAN-T5 model from Hugging Face...")
+
+    try:
+        from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+        model_name = "google/flan-t5-base"
+        flan_dir.mkdir(parents=True, exist_ok=True)
+
+        print(f"  Downloading {model_name} (this may take a few minutes)...")
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+        print(f"  Saving model to {flan_dir}...")
+        tokenizer.save_pretrained(str(flan_dir))
+        model.save_pretrained(str(flan_dir))
+
+        print("[OK] FLAN-T5 model downloaded successfully!")
+        return True
+
+    except Exception as e:
+        print(f"[ERROR] Failed to download FLAN-T5 model: {e}")
         return False
 
 
 if __name__ == "__main__":
-    print("Checking models...")
+    print("Checking all required models...")
     print("-" * 50)
 
     whisper_ok = check_whisper_model()
-    print()
-    fine_tuned_ok = check_fine_tuned_model()
+    fine_tuned_ok = check_fine_tuned_summarizer()
+    flan_ok = check_flan_t5_model()
 
     print("-" * 50)
-    if whisper_ok and fine_tuned_ok:
+    if whisper_ok and fine_tuned_ok and flan_ok:
         print("[OK] All models are ready!")
-    elif whisper_ok:
-        print("[WARNING] Whisper model is ready, but fine-tuned model is missing.")
     else:
-        print("[ERROR] Some models are missing. Please download them.")
+        print("[WARNING] Some models are missing. Please check the logs above.")

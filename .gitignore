@@ -2,7 +2,7 @@
 Model/Lecture_summarizer/
 Model/whisper-base/
 backend/.venv/
-backend\services\local_variables.py
+backend/services/local_variables.py
 
 # Ignore datasets
 Data/

@@ -8,10 +8,12 @@ const mediaButton = document.getElementById("mediaSubmit");
 const mediaTranscript = document.getElementById("mediaTranscript");
 const mediaSummary = document.getElementById("mediaSummary");
 
+const textDownloadBtn = document.getElementById("textDownloadBtn");
+const mediaDownloadBtn = document.getElementById("mediaDownloadBtn");
+
 const loadApiBase = () => {
   const saved = localStorage.getItem("summarizer:apiBase");
   if (saved) return saved;
-  // Default to relative path if served from same origin, otherwise use input value
   return apiInput.value || "/api";
 };
 const saveApiBase = (value) => localStorage.setItem("summarizer:apiBase", value);
@@ -134,6 +136,65 @@ const processMedia = async () => {
   }
 };
 
+const downloadPDF = async (filename, text) => {
+  // 1. Validation
+  if (!text || text.trim() === "" || text.includes("No summary generated yet")) {
+    showToast("There is no summary to download.");
+    return;
+  }
+
+  // 2. Disable buttons temporarily
+  textDownloadBtn.disabled = true;
+  mediaDownloadBtn.disabled = true;
+  showToast("Generating PDF...");
+
+  try {
+    // 3. Request PDF from Backend
+    const response = await fetch(`${loadApiBase()}/download-pdf`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        text: text, 
+        filename: filename.replace(".txt", ".pdf") // Ensure extension is pdf
+      }),
+    });
+
+    if (!response.ok) throw new Error("Failed to generate PDF");
+
+    // 4. Convert response to Blob
+    const blob = await response.blob();
+
+    // 5. Trigger Download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename.replace(".txt", ".pdf");
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    showToast("PDF Downloaded!");
+
+  } catch (error) {
+    console.error(error);
+    showToast("Error generating PDF.");
+  } finally {
+    textDownloadBtn.disabled = false;
+    mediaDownloadBtn.disabled = false;
+  }
+};
+
 textButton.addEventListener("click", summarizeText);
 mediaButton.addEventListener("click", processMedia);
 
+textDownloadBtn.addEventListener("click", () => {
+    // If the class is placeholder, treat it as empty
+    const content = textSummary.classList.contains("placeholder") ? "" : textSummary.value;
+    downloadPDF("lecture_summary.pdf", content);
+});
+
+mediaDownloadBtn.addEventListener("click", () => {
+    downloadPDF("media_summary.pdf", mediaSummary.value);
+});
